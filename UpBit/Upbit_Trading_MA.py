@@ -120,7 +120,7 @@ while True:
                         buy_order(ticker, krw)
                 elif (current_price < ma) and (up_flag == True):
                     up_flag = False
-        else:
+        elif tm.tm_min % trade_delay > 0:
             trade_flag = True
 
         if tm.tm_sec % state_delay == 0:
@@ -141,3 +141,5 @@ while True:
         print("에러 발생")
         slack.chat.post_message("#trading-log", "에러 발생", as_user=True)
     time.sleep(1)
+
+# TODO : 1분마다 급락 모니터링해서 위험방지
