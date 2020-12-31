@@ -8,6 +8,7 @@ from slacker import Slacker
 # 변수 선언
 state_delay = 5
 trade_delay = 10
+current_hour = None
 ma_count = 15
 up_flag = True
 trade_flag = True
@@ -51,9 +52,10 @@ def get_close_10min(ticker):
 
 # 구매
 def buy_order(ticker, krw):
-    buy_no = upbit.buy_market_order(ticker, krw)
-    print("구매 : ", krw, "주문번호 : ", buy_no)
-    slack.chat.post_message("#trading-event", " -> 구매 : " + str(krw) + " / " + str(buy_no), as_user=True)
+    unit = krw - (krw % 100)
+    buy_no = upbit.buy_market_order(ticker, unit)
+    print("구매 : ", unit, "주문번호 : ", buy_no)
+    slack.chat.post_message("#trading-event", " -> 구매 : " + str(unit) + " / " + str(buy_no), as_user=True)
 
 
 # 판매
@@ -72,11 +74,11 @@ def select_ticker():
 
 
 # 가동 알림
-def start_alert(now, ticker, ma):
+def start_alert(now, ticker, ma, slack):
     print("\n트레이딩봇 가동합니다. " + str(now), " - Ticker : " + ticker, " - MA : " + str(ma), sep='\n')
-    slack.chat.post_message("#bitcoin", "트레이딩봇 가동합니다. " + str(now), as_user=True)
-    slack.chat.post_message("#bitcoin", " - Ticker : " + ticker, as_user=True)
-    slack.chat.post_message("#bitcoin", " - MA : " + str(ma), as_user=True)
+    slack.chat.post_message("#trading-log", "트레이딩봇 가동합니다. " + str(now), as_user=True)
+    slack.chat.post_message("#trading-log", " - Ticker : " + ticker, as_user=True)
+    slack.chat.post_message("#trading-log", " - MA : " + str(ma), as_user=True)
     print("\n", "=============================")
 
 
@@ -88,8 +90,10 @@ slack = Slacker(get_slack_key())
 ticker = select_ticker()
 
 # Standby
+current_hour = time.localtime(time.time()).tm_hour - 1
+print(time.localtime(time.time()).tm_hour != current_hour)
 ma = get_ma(ticker, ma_count)
-start_alert(datetime.datetime.now(), ticker, ma)
+start_alert(datetime.datetime.now(), ticker, ma, slack)
 
 # 트레이딩 루프
 while True:
@@ -125,7 +129,15 @@ while True:
             print(ticker.split('-')[0], " : ", krw)
             print(ticker.split('-')[1], " : ", coin)
             print("------------------------")
+        if tm.tm_hour != current_hour:
+            current_hour = tm.tm_hour
+            slack.chat.post_message("#trading-log", "=======================", as_user=True)
+            slack.chat.post_message("#trading-log", "[현재 현황]", as_user=True)
+            slack.chat.post_message("#trading-log", ticker + "현재가 : " + current_price, as_user=True)
+            slack.chat.post_message("#trading-log", ticker + " : " + coin, as_user=True)
+            slack.chat.post_message("#trading-log", "KRW : " + krw, as_user=True)
+            slack.chat.post_message("#trading-log", "=======================", as_user=True)
     except:
         print("에러 발생")
-        slack.chat.post_message("#bitcoin", "에러 발생", as_user=True)
+        slack.chat.post_message("#trading-log", "에러 발생", as_user=True)
     time.sleep(1)
