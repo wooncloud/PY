@@ -52,7 +52,7 @@ def get_close_10min(ticker):
 
 # 구매
 def buy_order(ticker, krw):
-    unit = krw - (krw % 100)
+    unit = krw - (krw * 0.001) # 수수료
     buy_no = upbit.buy_market_order(ticker, unit)
     print("구매 : ", unit, "주문번호 : ", buy_no)
     slack.chat.post_message("#trading-event", " -> 구매 : " + str(unit) + " / " + str(buy_no), as_user=True)
