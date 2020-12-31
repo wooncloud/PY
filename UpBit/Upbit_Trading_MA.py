@@ -76,6 +76,7 @@ def select_ticker():
 # 가동 알림
 def start_alert(now, ticker, ma, slack):
     print("\n트레이딩봇 가동합니다. " + str(now), " - Ticker : " + ticker, " - MA : " + str(ma), sep='\n')
+    slack.chat.post_message("#trading-log", "=============================", as_user=True)
     slack.chat.post_message("#trading-log", "트레이딩봇 가동합니다. " + str(now), as_user=True)
     slack.chat.post_message("#trading-log", " - Ticker : " + ticker, as_user=True)
     slack.chat.post_message("#trading-log", " - MA : " + str(ma), as_user=True)
@@ -91,7 +92,6 @@ ticker = select_ticker()
 
 # Standby
 current_hour = time.localtime(time.time()).tm_hour - 1
-print(time.localtime(time.time()).tm_hour != current_hour)
 ma = get_ma(ticker, ma_count)
 start_alert(datetime.datetime.now(), ticker, ma, slack)
 
@@ -131,12 +131,12 @@ while True:
             print("------------------------")
         if tm.tm_hour != current_hour:
             current_hour = tm.tm_hour
-            slack.chat.post_message("#trading-log", "=======================", as_user=True)
-            slack.chat.post_message("#trading-log", "[현재 현황]", as_user=True)
-            slack.chat.post_message("#trading-log", ticker + "현재가 : " + current_price, as_user=True)
-            slack.chat.post_message("#trading-log", ticker + " : " + coin, as_user=True)
-            slack.chat.post_message("#trading-log", "KRW : " + krw, as_user=True)
-            slack.chat.post_message("#trading-log", "=======================", as_user=True)
+            slack.chat.post_message("#trading-log", ("------------------------"), as_user=True)
+            slack.chat.post_message("#trading-log", "[현재 현황]" + str(datetime.datetime.now()), as_user=True)
+            slack.chat.post_message("#trading-log", ticker + " 현재가 : " + str(current_price), as_user=True)
+            slack.chat.post_message("#trading-log", ticker + " : " + str(coin), as_user=True)
+            slack.chat.post_message("#trading-log", "KRW : " + str(krw), as_user=True)
+            slack.chat.post_message("#trading-log", ("------------------------"), as_user=True)
     except:
         print("에러 발생")
         slack.chat.post_message("#trading-log", "에러 발생", as_user=True)
