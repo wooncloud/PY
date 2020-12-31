@@ -1,12 +1,27 @@
 import pyupbit
-import time
 
-access = "qGOOWWtGAUIUTxmniGlha3uk0BSw2ihjkonnilhI"
-secret = "sC9m0CxhcqheUYgOJffhVrhtpFGJB7e1Zn2yrr3v"
 
-upbit = pyupbit.Upbit(access, secret)
+def get_upbit_key():
+    path = os.getcwd() + "/.key/upbit key.txt"
+    key = None
+    secret = None
+
+    with open(path) as f:
+        lines = f.readlines()
+        key = lines[0].strip()
+        secret = lines[1].strip()
+        
+    return pyupbit.Upbit(key, secret)
+
+
+# init
+upbit = get_upbit_key()
+
+
+# ticker split
 ticker = "KRW-BTC"
 print(ticker.split('-'))
+
 
 
 df = pyupbit.get_ohlcv(ticker, "minute10")
@@ -15,15 +30,6 @@ print(close[-2])
 print(close[-1])
 print(close)
 
-tm = time.localtime(time.time())
-print("year:", tm.tm_year)
-print("month:", tm.tm_mon)
-print("day:", tm.tm_mday)
-print("hour:", tm.tm_hour)
-print("minute:", tm.tm_min)
-print("second:", tm.tm_sec)
-
-print("\n\n\n")
 btc = upbit.get_balance("BTC")
 print(btc)
 print(upbit.get_balances())
