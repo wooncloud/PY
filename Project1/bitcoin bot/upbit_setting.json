@@ -1,0 +1,18 @@
+{
+  "power": true,
+  "is_all_timing": true,
+  "all_timing": 1,
+  "log": true,
+  "risk_block": [
+    { "number": 1, "type": "alert", "timing": 1, "name": "risk name 1" },
+    { "number": 2, "type": "sell", "timing": 1, "name": "risk name 2" }
+  ],
+  "golden_cross": [
+    { "number": 1, "coin": "all", "MA": 5, "timing": 1 },
+    { "number": 2, "coin": "BTC", "MA": 20, "timing": 1 }
+  ],
+  "trend": [
+    { "number": 1, "coin": "all", "value": 10, "timing": 1 },
+    { "number": 2, "coin": "BTC", "value": 20.5, "timing": 1 }
+  ]
+}
