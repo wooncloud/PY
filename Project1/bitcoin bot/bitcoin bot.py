@@ -1,4 +1,3 @@
-import os
 import json
 import time
 import datetime
@@ -7,13 +6,15 @@ import discord
 from discord.ext import commands
 # 분할 모듈
 import KeyModule
+import UpbitModule
 import MsgDiscord
 import FileControl
 
 
 # init
 upbit = KeyModule.get_upbit_key()
-settingJson = FileControl.open_json_file("upbit_setting.json")
+settingJson = FileControl.open_json_file("json/upbit_setting.json")
+helpJson = FileControl.open_json_file("json/help.json")
 
 app = commands.Bot(command_prefix='$')
 
@@ -26,27 +27,20 @@ async def on_ready():
 
 @app.event
 async def on_message(message):
-    tempEmbed = None
-
     if message.author == app.user: 
         return
     if message.content.startswith('$도움말') or message.content.startswith('$help'): 
-        helpEmbed = MsgDiscord.get_help_embed()
-        await message.channel.send(embed=helpEmbed)
+        await message.channel.send(embed=MsgDiscord.get_help_embed(helpJson["help"]))
     if message.content.startswith('$공통설정'):
-        tempEmbed = MsgDiscord.get_common_setting(settingJson)
-        await message.channel.send(embed=tempEmbed)
+        await message.channel.send(embed=MsgDiscord.get_common_setting(settingJson))
     if message.content.startswith('$위험방지'):
-        tempEmbed = MsgDiscord.get_risk_block_setting(settingJson)
-        await message.channel.send(embed=tempEmbed)
+        await message.channel.send(embed=MsgDiscord.get_risk_block_setting(settingJson))
     if message.content.startswith('$골든크로스'):
-        tempEmbed = MsgDiscord.get_golden_cross_setting(settingJson)
-        await message.channel.send(embed=tempEmbed)
+        await message.channel.send(embed=MsgDiscord.get_golden_cross_setting(settingJson))
     if message.content.startswith('$코인동향'):
-        tempEmbed = MsgDiscord.get_trend_setting(settingJson)
-        await message.channel.send(embed=tempEmbed)
+        await message.channel.send(embed=MsgDiscord.get_trend_setting(settingJson))
 
-    tempEmbed = None
+
 
 
 app.run(KeyModule.get_discord_key())

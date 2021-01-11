@@ -1,0 +1,29 @@
+{
+  "help": [
+    {
+      "name": "$help,$도움말",
+      "value": "도움이 필요하면 불러봐요.",
+      "inline": true
+    },
+    {
+      "name": "$공통설정",
+      "value": "공통 설정 내용을 보여줍니다.",
+      "inline": false
+    },
+    {
+      "name": "$위험방지",
+      "value": "위험방지 세팅 내용을 보여줍니다.",
+      "inline": false
+    },
+    {
+      "name": "$골든크로스",
+      "value": "골든크로스 세팅 내용을 보여줍니다.",
+      "inline": false
+    },
+    {
+      "name": "$코인동향",
+      "value": "코인동향 세팅 내용을 보여줍니다.",
+      "inline": false
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "power": true,
+  "is_all_timing": true,
+  "all_timing": "3분",
+  "log": true,
+  "risk_block": [
+    { "value": -5, "type": "alert", "timing": "1분", "name": "위험방지 알림" },
+    { "value": -100, "type": "sell", "timing": "1분", "name": "위험방지 매도" }
+  ],
+  "golden_cross": [
+    { "coin": "all", "MA": 5, "timing": "1시간" },
+    { "coin": "BTC", "MA": 20, "timing": "1시간" }
+  ],
+  "trend": [
+    { "coin": "all", "value": 10, "timing": "1시간" },
+    { "coin": "BTC", "value": 20.5, "timing": "1시간" }
+  ]
+}

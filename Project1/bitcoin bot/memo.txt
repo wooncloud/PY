@@ -1,0 +1,31 @@
+
+while True:
+    try:
+        tm = time.localtime(time.time())
+        dt = datetime.datetime.now()
+        # print(str(dt))
+        
+        if settingJson["is_all_timing"]:
+            # 공통 시간 사용할 때
+            at = settingJson["all_timing"]
+            if(at.find("분") > -1):
+                if tm.tm_min % int(at.replace('분', '')) == 0 and (tm.tm_sec == 0):
+                    print("min")
+            elif(at.find("시간") > -1):
+                if tm.tm_hour % int(at.replace('시간', '')) == 0  and (tm.tm_min == 0) and (tm.tm_sec == 0):
+                    print("hour")
+            elif(at.find("일") > -1):
+                if (tm.tm_hour == 0) and (tm.tm_min == 0) and (tm.tm_sec == 0):
+                    print("day")
+            elif(at.find("주") > -1):
+                if tm.tm_wday == 0 and (tm.tm_hour == 0) and (tm.tm_min == 0) and (tm.tm_sec == 0):
+                    print("week")
+            elif(at.find("달") > -1):
+                if tm.tm_mday == 1 and (tm.tm_hour == 0) and (tm.tm_min == 0) and (tm.tm_sec == 0):
+                    print("month")
+        else:
+            # 공통 시간 사용 안할 때
+            print("no all timing")
+    except:
+        print("에러 발생")
+    time.sleep(1)
