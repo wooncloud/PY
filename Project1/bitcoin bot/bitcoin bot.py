@@ -1,13 +1,11 @@
 import json
 import time
 import datetime
+import asyncio
 import pyupbit
-import discord
-from discord.ext import commands
 # 분할 모듈
 import KeyModule
 import UpbitModule
-import MsgDiscord
 import FileControl
 
 
@@ -16,31 +14,25 @@ upbit = KeyModule.get_upbit_key()
 settingJson = FileControl.open_json_file("json/upbit_setting.json")
 helpJson = FileControl.open_json_file("json/help.json")
 
-app = commands.Bot(command_prefix='$')
 
 
-@app.event
-async def on_ready():
-    print(app.user.name, " - 디스코드 온라인.")
-    await app.change_presence(status=discord.Status.online, activity=discord.Game(name="$help로 도움말 열기"))
+# 함수 정의
+async def main_loop():
+    while True:
+        print("test")
+        await asyncio.sleep(1)
 
 
-@app.event
-async def on_message(message):
-    if message.author == app.user: 
-        return
-    if message.content.startswith('$도움말') or message.content.startswith('$help'): 
-        await message.channel.send(embed=MsgDiscord.get_help_embed(helpJson["help"]))
-    if message.content.startswith('$공통설정'):
-        await message.channel.send(embed=MsgDiscord.get_common_setting(settingJson))
-    if message.content.startswith('$위험방지'):
-        await message.channel.send(embed=MsgDiscord.get_risk_block_setting(settingJson))
-    if message.content.startswith('$골든크로스'):
-        await message.channel.send(embed=MsgDiscord.get_golden_cross_setting(settingJson))
-    if message.content.startswith('$코인동향'):
-        await message.channel.send(embed=MsgDiscord.get_trend_setting(settingJson))
+async def coroutine_trends(settingJson):
+    pass
+    #for trends in settingJson["trend"]:
 
 
+if __name__ == "__main__":
+    # start
+    UpbitModule.get_ticker_krw_base()
 
-
-app.run(KeyModule.get_discord_key())
+    #이벤트 루프
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main_loop())
+    loop.close()

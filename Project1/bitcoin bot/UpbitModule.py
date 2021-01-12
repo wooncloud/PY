@@ -8,6 +8,8 @@ timingEnum = {
     '1시간': 'minute60', '4시간': 'minute240'
 }
 
+krwTicker = []
+
 
 # 원화 보유량
 def get_krw_balance(upbit):
@@ -40,3 +42,12 @@ def buy_order(upbit, ticker, krw):
 def sell_order(upbit, ticker, coin):
     sell_no = upbit.sell_market_order(ticker, coin)
     print("판매 : ", coin, "주문번호 : ", sell_no)
+
+
+# 원화 티커 가져오기
+def get_ticker_krw_base():
+    krwTicker.clear()
+    allTicker = pyupbit.get_tickers()
+    for ticker in allTicker:
+        if ticker.find("KRW") > -1:
+            krwTicker.append(ticker)
